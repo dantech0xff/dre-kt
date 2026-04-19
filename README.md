@@ -6,6 +6,20 @@
 
 dre-kt implements the DRE pattern: a unidirectional data flow architecture where **Actions** are dispatched, a pure **Reducer** computes new state + side effects, and **Effects** are handled externally. Async operations feed results back as new actions.
 
+## Installation
+
+Add to your `build.gradle.kts`:
+
+```kotlin
+dependencies {
+    // Core only (no Android dependency)
+    implementation("io.github.dantech0xff:dre-core:0.1.0")
+
+    // Android ViewModel integration (includes dre-core)
+    implementation("io.github.dantech0xff:dre-android:0.1.0")
+}
+```
+
 ## Modules
 
 | Module | Description | Dependencies |
