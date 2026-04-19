@@ -4,10 +4,10 @@
 
 ```kotlin
 // Core only (no Android dependency)
-implementation("io.github.dantech0xff:dre-core:0.1.0")
+implementation("io.github.dantech0xff:dre-core:<latest-version>")
 
 // Android ViewModel integration (includes dre-core)
-implementation("io.github.dantech0xff:dre-android:0.1.0")
+implementation("io.github.dantech0xff:dre-android:<latest-version>")
 ```
 
 ## Marker Interfaces (dre-core)
