@@ -81,10 +81,10 @@ class DreStoreViewModelTest {
         dispatchContext: CoroutineDispatcher,
     ) : DreStoreViewModel<TestState, TestAction, TestEffect, TestAsyncOp>(
         reducer = reducer,
-        sideEffectHandlers = handlers,
-        initialState = TestState(),
         dispatchContext = dispatchContext,
     ) {
+        override val sideEffectHandlers: List<SideEffectHandler<TestEffect>> = handlers
+        override val initialState: TestState = TestState()
         var lastAsyncOp: TestAsyncOp? = null
         var lastSnapshot: TestState? = null
 
