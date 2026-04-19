@@ -23,8 +23,10 @@ import kotlinx.coroutines.flow.StateFlow
  * ```kotlin
  * class MyViewModel(reducer: MyReducer) : DreStoreViewModel<MyState, MyAction, MyEffect, MyAsyncOp>(
  *     reducer = reducer,
- *     initialState = MyState.initial,
  * ) {
+ *     override val initialState = MyState.initial
+ *     override val sideEffectHandlers = listOf(analyticsHandler)
+ *
  *     override suspend fun executeAsyncOp(op: MyAsyncOp, stateSnapshot: MyState) {
  *         when (op) {
  *             is MyAsyncOp.LoadData -> {
