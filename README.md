@@ -1,5 +1,7 @@
 # dre-kt
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.dantech0xff/dre-core)](https://central.sonatype.com/namespace/io.github.dantech0xff)
+
 **Dispatch → Reduce → Effects** — A lightweight, opinionated state management library for Kotlin & Android.
 
 ## Overview
@@ -12,13 +14,15 @@ dre-kt implements the DRE pattern: a unidirectional data flow architecture where
 
 Add to your `build.gradle.kts`:
 
+Check the latest version on [Maven Central](https://central.sonatype.com/namespace/io.github.dantech0xff).
+
 ```kotlin
 dependencies {
     // Core only (no Android dependency)
-    implementation("io.github.dantech0xff:dre-core:0.1.0")
+    implementation("io.github.dantech0xff:dre-core:<latest-version>")
 
     // Android ViewModel integration (includes dre-core)
-    implementation("io.github.dantech0xff:dre-android:0.1.0")
+    implementation("io.github.dantech0xff:dre-android:<latest-version>")
 }
 ```
 
