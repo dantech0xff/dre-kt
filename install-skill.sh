@@ -20,6 +20,12 @@ FILES=(
 
 echo "Installing dre-integrate skill..."
 
+# Clean old installation to ensure fresh state
+if [ -d "$SKILL_DIR" ]; then
+    echo "  Removing old installation..."
+    rm -rf "$SKILL_DIR"
+fi
+
 mkdir -p "$SKILL_DIR/references"
 
 for file in "${FILES[@]}"; do

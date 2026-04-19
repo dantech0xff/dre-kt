@@ -94,7 +94,7 @@ Move ALL state transition logic out of ViewModel into pure Reducer:
 ### 4c. Slim Down ViewModel
 
 ViewModel becomes thin:
-- Extend `DreStoreViewModel` (or `SimpleDreStoreViewModel`)
+- Extend `DreStoreViewModel`, override `initialState` and optionally `sideEffectHandlers`
 - Public methods just call `dispatch(Action)`
 - `executeAsyncOp` handles I/O, calls `dispatch(ResultAction)`
 - Remove `MutableStateFlow`, `viewModelScope.launch` for state work
@@ -103,7 +103,7 @@ ViewModel becomes thin:
 
 If feature has analytics/navigation/toasts:
 - Create handler class implementing `SideEffectHandler<XEffect>`
-- Pass to ViewModel constructor via `sideEffectHandlers` param
+- Override `sideEffectHandlers` property in ViewModel
 
 ## Step 5: Verify
 

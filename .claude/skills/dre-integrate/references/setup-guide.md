@@ -89,6 +89,6 @@ app/src/main/kotlin/com/example/app/
 │   └── settings/
 │       ├── SettingsContract.kt
 │       ├── SettingsReducer.kt
-│       ├── SettingsViewModel.kt   # SimpleDreStoreViewModel
+│       ├── SettingsViewModel.kt   # DreStoreViewModel
 │       └── SettingsScreen.kt
 ```

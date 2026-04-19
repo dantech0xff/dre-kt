@@ -87,8 +87,9 @@ class MyReducer : Reducer<MyState, MyAction, MyEffect, MyAsyncOp> {
 ```kotlin
 class MyViewModel(reducer: MyReducer) : DreStoreViewModel<MyState, MyAction, MyEffect, MyAsyncOp>(
     reducer = reducer,
-    initialState = MyState(),
 ) {
+    override val initialState = MyState()
+
     override suspend fun executeAsyncOp(op: MyAsyncOp, stateSnapshot: MyState) {
         when (op) {
             is MyAsyncOp.FetchData -> {
@@ -115,17 +116,6 @@ val store = DreStore(
 
 store.dispatch(MyAction.Increment)
 store.state.collect { /* observe */ }
-```
-
-### 5. For simple screens (no async ops)
-
-```kotlin
-class SettingsViewModel(reducer: SettingsReducer) : SimpleDreStoreViewModel<...>(
-    reducer = reducer,
-    initialState = SettingsState(),
-) {
-    fun toggle() = dispatch(SettingsAction.Toggle)
-}
 ```
 
 ## Architecture

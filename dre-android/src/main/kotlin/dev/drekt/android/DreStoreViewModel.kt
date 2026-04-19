@@ -9,20 +9,24 @@ import dev.drekt.core.DreState
 import dev.drekt.core.DreStore
 import dev.drekt.core.Reducer
 import dev.drekt.core.SideEffectHandler
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Android [ViewModel] wrapper around [DreStore].
  *
- * Binds [DreStore] to [viewModelScope] and [DreDispatchers.mainImmediate].
+ * Binds [DreStore] to [viewModelScope] and the injected [CoroutineDispatcher].
  * The dispatch loop is platform-agnostic in [DreStore] — this class only
  * provides lifecycle scoping and the abstract [executeAsyncOp] hook.
  *
  * ```kotlin
  * class MyViewModel(reducer: MyReducer) : DreStoreViewModel<MyState, MyAction, MyEffect, MyAsyncOp>(
  *     reducer = reducer,
- *     initialState = MyState.initial,
  * ) {
+ *     override val initialState = MyState.initial
+ *     override val sideEffectHandlers = listOf(analyticsHandler)
+ *
  *     override suspend fun executeAsyncOp(op: MyAsyncOp, stateSnapshot: MyState) {
  *         when (op) {
  *             is MyAsyncOp.LoadData -> {
@@ -38,22 +42,24 @@ import kotlinx.coroutines.flow.StateFlow
  */
 abstract class DreStoreViewModel<S : DreState, A : DreAction, E : DreEffect, O : DreAsyncOp>(
     reducer: Reducer<S, A, E, O>,
-    sideEffectHandlers: List<SideEffectHandler<E>> = emptyList(),
-    initialState: S,
-    dispatchers: DreDispatchers = DefaultDreDispatchers,
+    dispatchContext: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : ViewModel() {
 
-    private val store = DreStore(
+    protected open val sideEffectHandlers: List<SideEffectHandler<E>> = emptyList()
+    protected open val initialState: S
+        get() = throw NotImplementedError("Provide initialState or override getter")
+
+    private val store by lazy { DreStore(
         reducer = reducer,
         initialState = initialState,
         scope = viewModelScope,
-        dispatchContext = dispatchers.mainImmediate,
+        dispatchContext = dispatchContext,
         sideEffectHandlers = sideEffectHandlers,
         onAsyncOp = { op, snapshot -> executeAsyncOp(op, snapshot) },
-    )
+    ) }
 
     /** Current state. Observe from UI via `collectAsState()`. */
-    val state: StateFlow<S> = store.state
+    val state: StateFlow<S> get() = store.state
 
     /** Dispatch an action into the reduce loop. */
     protected fun dispatch(action: A) = store.dispatch(action)

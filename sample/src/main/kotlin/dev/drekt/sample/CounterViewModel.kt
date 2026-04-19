@@ -1,14 +1,19 @@
 package dev.drekt.sample
 
 import dev.drekt.android.DreStoreViewModel
+import dev.drekt.core.SideEffectHandler
 import kotlinx.coroutines.delay
 
 class CounterViewModel(
     reducer: CounterReducer = CounterReducer(),
 ) : DreStoreViewModel<CounterState, CounterAction, CounterEffect, CounterAsyncOp>(
     reducer = reducer,
-    initialState = CounterState(),
 ) {
+    override val initialState: CounterState
+        get() = CounterState()
+
+    override val sideEffectHandlers: List<SideEffectHandler<CounterEffect>>
+        get() = emptyList()
 
     override suspend fun executeAsyncOp(op: CounterAsyncOp, stateSnapshot: CounterState) {
         when (op) {

@@ -11,8 +11,7 @@
 ┌──────────────────────▼──────────────────────────┐
 │                  dre-android                     │
 │  DreStoreViewModel ─── wraps ──→ DreStore        │
-│  SimpleDreStoreViewModel                         │
-│  DreDispatchers (interface + impls)              │
+│                                                  │
 └──────────────────────┬──────────────────────────┘
                        │ depends on (api)
 ┌──────────────────────▼──────────────────────────┐
@@ -82,18 +81,11 @@ Fire-and-forget effect consumer. Each handler owns one concern. Runs in parallel
 
 Thin wrapper binding `DreStore` to Android `ViewModel`:
 - Provides `viewModelScope` as store's coroutine scope
-- Provides `DreDispatchers.mainImmediate` as dispatch context
+- Provides injected `CoroutineDispatcher` as dispatch context (defaults to `Dispatchers.Main.immediate`)
+- `initialState` and `sideEffectHandlers` are open properties — override in subclass
+- Store is lazily initialized to avoid Kotlin initialization order issues
 - Exposes abstract `executeAsyncOp` for subclass I/O handling
 - Calls `store.close()` in `onCleared()`
-
-### DreDispatchers (dre-android)
-
-Interface abstracting coroutine dispatchers for testability:
-- `main` — UI thread
-- `mainImmediate` — UI thread with immediate dispatch (serialization)
-- `io` — background I/O
-
-Implementations: `DefaultDreDispatchers` (production), `TestDreDispatchers` (test).
 
 ## Thread Safety Model
 

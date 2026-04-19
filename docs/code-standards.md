@@ -40,7 +40,7 @@ sealed interface MyAsyncOp : DreAsyncOp { ... }
 
 ### ViewModel Rules
 
-- Extend `DreStoreViewModel` (with async ops) or `SimpleDreStoreViewModel` (without)
+- Extend `DreStoreViewModel` — override `initialState` and optionally `sideEffectHandlers`
 - Public methods just call `dispatch(Action)` — no business logic
 - `executeAsyncOp` MUST call `dispatch()` with result action
 - `executeAsyncOp` MUST use `stateSnapshot`, NOT `state.value`
@@ -70,7 +70,7 @@ sealed interface MyAsyncOp : DreAsyncOp { ... }
 - Test every `when` branch
 
 ### Store/ViewModel Tests
-- Use `runTest` + `TestDreDispatchers(testScheduler)`
+- Use `runTest` + `StandardTestDispatcher(testScheduler)`
 - Use Turbine (`state.test { ... }`) for StateFlow assertions
 - Call `advanceUntilIdle()` after dispatch
 - For tests with `sideEffectHandlers`, call `store.close()` at end

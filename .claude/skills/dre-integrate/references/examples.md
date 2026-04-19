@@ -60,8 +60,9 @@ class CounterViewModel(
     reducer: CounterReducer = CounterReducer(),
 ) : DreStoreViewModel<CounterState, CounterAction, CounterEffect, CounterAsyncOp>(
     reducer = reducer,
-    initialState = CounterState(),
 ) {
+    override val initialState = CounterState()
+
     override suspend fun executeAsyncOp(op: CounterAsyncOp, stateSnapshot: CounterState) {
         when (op) {
             is CounterAsyncOp.FetchRandom -> {
@@ -142,10 +143,15 @@ class SettingsReducer : SimpleReducer<SettingsState, SettingsAction, SettingsEff
 
 class SettingsViewModel(
     reducer: SettingsReducer = SettingsReducer(),
-) : SimpleDreStoreViewModel<SettingsState, SettingsAction, SettingsEffect>(
-    reducer = reducer,
-    initialState = SettingsState(),
+) : DreStoreViewModel<SettingsState, SettingsAction, SettingsEffect, Nothing>(
+    reducer = reducer.asFullReducer(),
 ) {
+    override val initialState = SettingsState()
+
+    override suspend fun executeAsyncOp(op: Nothing, stateSnapshot: SettingsState) {
+        // Nothing type — never called
+    }
+
     fun toggleDarkMode() = dispatch(SettingsAction.ToggleDarkMode)
     fun toggleNotifications() = dispatch(SettingsAction.ToggleNotifications)
 }
@@ -194,10 +200,12 @@ class AnalyticsHandler(
 // Wire into ViewModel
 class CounterViewModel(
     reducer: CounterReducer = CounterReducer(),
-    analyticsHandler: AnalyticsHandler,
+    private val analyticsHandler: AnalyticsHandler,
 ) : DreStoreViewModel<...>(
     reducer = reducer,
-    sideEffectHandlers = listOf(analyticsHandler),
-    initialState = CounterState(),
-) { ... }
+) {
+    override val initialState = CounterState()
+    override val sideEffectHandlers = listOf(analyticsHandler)
+    // ...
+}
 ```
