@@ -27,7 +27,7 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("io.github.dantech0xff", "dre-core", "0.1.2")
+    coordinates("io.github.dantech0xff", "dre-core", "0.1.3")
 
     pom {
         name.set("dre-core")
