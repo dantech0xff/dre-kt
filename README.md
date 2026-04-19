@@ -8,6 +8,8 @@ dre-kt implements the DRE pattern: a unidirectional data flow architecture where
 
 ## Installation
 
+### Gradle
+
 Add to your `build.gradle.kts`:
 
 ```kotlin
@@ -19,6 +21,19 @@ dependencies {
     implementation("io.github.dantech0xff:dre-android:0.1.0")
 }
 ```
+
+### Claude Code Skill
+
+Install the `dre-integrate` skill to let Claude Code help you integrate dre-kt:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dantech0xff/dre-kt/master/install-skill.sh | bash
+```
+
+Then use in Claude Code:
+- `/dre-integrate setup` — Add dependency to your project
+- `/dre-integrate feature login` — Scaffold a new feature
+- `/dre-integrate migrate` — Migrate existing ViewModel to DRE
 
 ## Modules
 
@@ -138,19 +153,6 @@ Reducers are pure functions — test without coroutines:
     reducer.assertNoChange(MyState(phase = "loading"), MyAction.Submit)
 }
 ```
-
-## Claude Code Skill
-
-Install the `dre-integrate` skill to let Claude Code help you integrate dre-kt:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/dantech0xff/dre-kt/master/install-skill.sh | bash
-```
-
-Then use in Claude Code:
-- `/dre-integrate setup` — Add dependency to your project
-- `/dre-integrate feature login` — Scaffold a new feature
-- `/dre-integrate migrate` — Migrate existing ViewModel to DRE
 
 ## Requirements
 
