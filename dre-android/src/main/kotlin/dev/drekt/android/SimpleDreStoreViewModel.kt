@@ -7,6 +7,8 @@ import dev.drekt.core.Reducer
 import dev.drekt.core.ReduceResult
 import dev.drekt.core.SideEffectHandler
 import dev.drekt.core.SimpleReducer
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 /**
  * Convenience [DreStoreViewModel] for screens that don't need async operations.
@@ -26,12 +28,12 @@ abstract class SimpleDreStoreViewModel<S : DreState, A : DreAction, E : DreEffec
     reducer: SimpleReducer<S, A, E>,
     sideEffectHandlers: List<SideEffectHandler<E>> = emptyList(),
     initialState: S,
-    dispatchers: DreDispatchers = DefaultDreDispatchers,
+    dispatchContext: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : DreStoreViewModel<S, A, E, Nothing>(
     reducer = reducer.asFullReducer(),
     sideEffectHandlers = sideEffectHandlers,
     initialState = initialState,
-    dispatchers = dispatchers,
+    dispatchContext = dispatchContext,
 ) {
     /** No async ops — unreachable by design ([Nothing] has no instances). */
     override suspend fun executeAsyncOp(op: Nothing, stateSnapshot: S) {

@@ -22,7 +22,7 @@
 | Module | Purpose | Key Classes |
 |--------|---------|-------------|
 | `dre-core` | Dispatch loop, types, test utilities | `DreStore`, `Reducer`, `ReduceResult`, `SideEffectHandler` |
-| `dre-android` | Android ViewModel binding | `DreStoreViewModel`, `SimpleDreStoreViewModel`, `DreDispatchers` |
+| `dre-android` | Android ViewModel binding | `DreStoreViewModel`, `SimpleDreStoreViewModel` |
 | `sample` | Counter demo app | `CounterViewModel`, `CounterReducer` |
 
 ## Key Design Decisions
@@ -31,7 +31,7 @@
 Types (`DreState`, `DreAction`, `DreEffect`, `DreAsyncOp`) are marker interfaces — prevents accidentally passing wrong types into the DRE pipeline.
 
 ### Single-Writer via Dispatcher
-State mutations serialize on `DreDispatchers.mainImmediate` — no mutex/lock needed. The dispatcher IS the synchronization mechanism.
+State mutations serialize on the injected `CoroutineDispatcher` (defaults to `Dispatchers.Main.immediate`) — no mutex/lock needed. The dispatcher IS the synchronization mechanism.
 
 ### Async Ops as Data
 Async operations are sealed classes returned by the reducer, not launched inside it. This keeps reducers pure and testable.
@@ -60,7 +60,7 @@ Async operations are sealed classes returned by the reducer, not launched inside
 
 - **Reducers**: Pure function tests — no coroutines, use `assertReduce`/`assertNoChange`
 - **DreStore**: Coroutine tests with `runTest` + Turbine for StateFlow
-- **ViewModels**: Same as DreStore + `TestDreDispatchers`
+- **ViewModels**: Same as DreStore + `StandardTestDispatcher(testScheduler)`
 
 ## Current Test Coverage
 

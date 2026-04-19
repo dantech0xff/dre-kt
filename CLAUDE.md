@@ -7,7 +7,7 @@
 ## Modules
 
 - `dre-core`: Platform-agnostic dispatch loop (`DreStore`, `Reducer`, `ReduceResult`, `SideEffectHandler`)
-- `dre-android`: Android ViewModel integration (`DreStoreViewModel`, `SimpleDreStoreViewModel`, `DreDispatchers`)
+- `dre-android`: Android ViewModel integration (`DreStoreViewModel`, `SimpleDreStoreViewModel`)
 - `sample`: Counter demo app with Compose UI
 
 ## Build & Test
@@ -30,7 +30,7 @@
 - Reducers MUST be pure — no I/O, no coroutines
 - `sealed interface` for Action/Effect/AsyncOp types
 - `data class` for State
-- Tests: JUnit 4 + Truth + Turbine + `TestDreDispatchers`
+- Tests: JUnit 4 + Truth + Turbine + `StandardTestDispatcher`
 - Tests with `sideEffectHandlers` must call `store.close()` before test ends
 
 ## Documentation

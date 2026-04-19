@@ -8,7 +8,9 @@ import dev.drekt.core.DreState
 import dev.drekt.core.SideEffectHandler
 import dev.drekt.core.SimpleReduceResult
 import dev.drekt.core.SimpleReducer
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -53,12 +55,12 @@ class SimpleDreStoreViewModelTest {
     private class TestSimpleViewModel(
         reducer: SimpleReducer<SimpleState, SimpleAction, SimpleEffect>,
         handlers: List<SideEffectHandler<SimpleEffect>> = emptyList(),
-        dispatchers: DreDispatchers,
+        dispatchContext: CoroutineDispatcher,
     ) : SimpleDreStoreViewModel<SimpleState, SimpleAction, SimpleEffect>(
         reducer = reducer,
         sideEffectHandlers = handlers,
         initialState = SimpleState(),
-        dispatchers = dispatchers,
+        dispatchContext = dispatchContext,
     ) {
         fun setValue(value: String) = dispatch(SimpleAction.SetValue(value))
         fun reset() = dispatch(SimpleAction.Reset)
@@ -70,13 +72,13 @@ class SimpleDreStoreViewModelTest {
 
     @Test
     fun `initial state is correct`() = runTest {
-        val vm = TestSimpleViewModel(simpleReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestSimpleViewModel(simpleReducer, dispatchContext = StandardTestDispatcher(testScheduler))
         assertThat(vm.state.value).isEqualTo(SimpleState())
     }
 
     @Test
     fun `dispatch updates state`() = runTest {
-        val vm = TestSimpleViewModel(simpleReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestSimpleViewModel(simpleReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             assertThat(awaitItem()).isEqualTo(SimpleState()) // initial
@@ -88,7 +90,7 @@ class SimpleDreStoreViewModelTest {
 
     @Test
     fun `multiple dispatches serialize correctly`() = runTest {
-        val vm = TestSimpleViewModel(simpleReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestSimpleViewModel(simpleReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             awaitItem() // initial
@@ -109,7 +111,7 @@ class SimpleDreStoreViewModelTest {
         val vm = TestSimpleViewModel(
             simpleReducer,
             handlers = listOf(handler),
-            dispatchers = TestDreDispatchers(testScheduler),
+            dispatchContext = StandardTestDispatcher(testScheduler),
         )
 
         vm.state.test {
@@ -129,7 +131,7 @@ class SimpleDreStoreViewModelTest {
 
     @Test
     fun `reset returns to initial state`() = runTest {
-        val vm = TestSimpleViewModel(simpleReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestSimpleViewModel(simpleReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             awaitItem() // initial

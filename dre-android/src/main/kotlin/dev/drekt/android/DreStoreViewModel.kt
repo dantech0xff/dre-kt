@@ -9,12 +9,14 @@ import dev.drekt.core.DreState
 import dev.drekt.core.DreStore
 import dev.drekt.core.Reducer
 import dev.drekt.core.SideEffectHandler
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Android [ViewModel] wrapper around [DreStore].
  *
- * Binds [DreStore] to [viewModelScope] and [DreDispatchers.mainImmediate].
+ * Binds [DreStore] to [viewModelScope] and the injected [CoroutineDispatcher].
  * The dispatch loop is platform-agnostic in [DreStore] — this class only
  * provides lifecycle scoping and the abstract [executeAsyncOp] hook.
  *
@@ -40,14 +42,14 @@ abstract class DreStoreViewModel<S : DreState, A : DreAction, E : DreEffect, O :
     reducer: Reducer<S, A, E, O>,
     sideEffectHandlers: List<SideEffectHandler<E>> = emptyList(),
     initialState: S,
-    dispatchers: DreDispatchers = DefaultDreDispatchers,
+    dispatchContext: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : ViewModel() {
 
     private val store = DreStore(
         reducer = reducer,
         initialState = initialState,
         scope = viewModelScope,
-        dispatchContext = dispatchers.mainImmediate,
+        dispatchContext = dispatchContext,
         sideEffectHandlers = sideEffectHandlers,
         onAsyncOp = { op, snapshot -> executeAsyncOp(op, snapshot) },
     )

@@ -9,7 +9,9 @@ import dev.drekt.core.DreAsyncOp
 import dev.drekt.core.DreEffect
 import dev.drekt.core.DreState
 import dev.drekt.core.SideEffectHandler
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -76,12 +78,12 @@ class DreStoreViewModelTest {
     private class TestViewModel(
         reducer: Reducer<TestState, TestAction, TestEffect, TestAsyncOp>,
         handlers: List<SideEffectHandler<TestEffect>> = emptyList(),
-        dispatchers: DreDispatchers,
+        dispatchContext: CoroutineDispatcher,
     ) : DreStoreViewModel<TestState, TestAction, TestEffect, TestAsyncOp>(
         reducer = reducer,
         sideEffectHandlers = handlers,
         initialState = TestState(),
-        dispatchers = dispatchers,
+        dispatchContext = dispatchContext,
     ) {
         var lastAsyncOp: TestAsyncOp? = null
         var lastSnapshot: TestState? = null
@@ -107,7 +109,7 @@ class DreStoreViewModelTest {
 
     @Test
     fun `dispatch updates state`() = runTest {
-        val vm = TestViewModel(testReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestViewModel(testReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             assertThat(awaitItem()).isEqualTo(TestState()) // initial
@@ -119,7 +121,7 @@ class DreStoreViewModelTest {
 
     @Test
     fun `multiple dispatches serialize correctly`() = runTest {
-        val vm = TestViewModel(testReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestViewModel(testReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             awaitItem() // initial
@@ -138,7 +140,7 @@ class DreStoreViewModelTest {
 
     @Test
     fun `async op receives state snapshot`() = runTest {
-        val vm = TestViewModel(testReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestViewModel(testReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             awaitItem() // initial
@@ -160,7 +162,7 @@ class DreStoreViewModelTest {
         val vm = TestViewModel(
             testReducer,
             handlers = listOf(handler),
-            dispatchers = TestDreDispatchers(testScheduler),
+            dispatchContext = StandardTestDispatcher(testScheduler),
         )
 
         vm.state.test {
@@ -176,7 +178,7 @@ class DreStoreViewModelTest {
 
     @Test
     fun `guard clause rejects action in wrong state`() = runTest {
-        val vm = TestViewModel(testReducer, dispatchers = TestDreDispatchers(testScheduler))
+        val vm = TestViewModel(testReducer, dispatchContext = StandardTestDispatcher(testScheduler))
 
         vm.state.test {
             awaitItem() // initial (phase=idle)

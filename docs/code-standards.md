@@ -70,7 +70,7 @@ sealed interface MyAsyncOp : DreAsyncOp { ... }
 - Test every `when` branch
 
 ### Store/ViewModel Tests
-- Use `runTest` + `TestDreDispatchers(testScheduler)`
+- Use `runTest` + `StandardTestDispatcher(testScheduler)`
 - Use Turbine (`state.test { ... }`) for StateFlow assertions
 - Call `advanceUntilIdle()` after dispatch
 - For tests with `sideEffectHandlers`, call `store.close()` at end

@@ -24,12 +24,9 @@ dre-kt/
 │   ├── build.gradle.kts
 │   └── src/
 │       ├── main/kotlin/dev/drekt/android/
-│       │   ├── DreDispatchers.kt      # Dispatcher abstraction interface
-│       │   ├── DefaultDreDispatchers.kt # Production impl (Main, Main.immediate, IO)
 │       │   ├── DreStoreViewModel.kt   # ViewModel wrapping DreStore
 │       │   └── SimpleDreStoreViewModel.kt # No-async-op convenience ViewModel
 │       └── test/kotlin/dev/drekt/android/
-│           ├── TestDreDispatchers.kt  # Test impl using StandardTestDispatcher
 │           ├── DreStoreViewModelTest.kt # 5 tests
 │           └── SimpleDreStoreViewModelTest.kt # 5 tests
 │
