@@ -24,11 +24,9 @@ dre-kt/
 │   ├── build.gradle.kts
 │   └── src/
 │       ├── main/kotlin/dev/drekt/android/
-│       │   ├── DreStoreViewModel.kt   # ViewModel wrapping DreStore
-│       │   └── SimpleDreStoreViewModel.kt # No-async-op convenience ViewModel
+│       │   └── DreStoreViewModel.kt   # ViewModel wrapping DreStore
 │       └── test/kotlin/dev/drekt/android/
-│           ├── DreStoreViewModelTest.kt # 5 tests
-│           └── SimpleDreStoreViewModelTest.kt # 5 tests
+│           └── DreStoreViewModelTest.kt # 5 tests
 │
 ├── sample/                            # Counter demo app
 │   ├── build.gradle.kts
@@ -49,9 +47,9 @@ dre-kt/
 | Module | Source files | Test files | Total |
 |--------|-------------|------------|-------|
 | dre-core | 6 | 4 | 10 |
-| dre-android | 4 | 3 | 7 |
+| dre-android | 1 | 1 | 2 |
 | sample | 4 | 0 | 4 |
-| **Total** | **14** | **7** | **21** |
+| **Total** | **11** | **5** | **16** |
 
 ## Dependencies
 

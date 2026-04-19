@@ -16,7 +16,7 @@ Use `AskUserQuestion`:
 
 **Question 2:** "Does this feature need async operations (API calls, database)?"
 - Yes → use `DreStoreViewModel` + `AsyncOp` type
-- No → use `SimpleDreStoreViewModel`, skip AsyncOp
+- No → use `DreStoreViewModel` with `Nothing` as AsyncOp type
 
 **Question 3:** "Does this feature need side effects (analytics, navigation, toasts)?"
 - Yes → include `Effect` sealed interface
@@ -140,8 +140,8 @@ class {Feature}ViewModel(
     reducer: {Feature}Reducer = {Feature}Reducer(),
 ) : DreStoreViewModel<{Feature}State, {Feature}Action, {Feature}Effect, {Feature}AsyncOp>(
     reducer = reducer,
-    initialState = {Feature}State.Initial,
 ) {
+    override val initialState = {Feature}State.Initial
 
     override suspend fun executeAsyncOp(op: {Feature}AsyncOp, stateSnapshot: {Feature}State) {
         when (op) {
@@ -157,14 +157,19 @@ class {Feature}ViewModel(
 ```kotlin
 package {basePackage}.feature.{featureLower}
 
-import dev.drekt.android.SimpleDreStoreViewModel
+import dev.drekt.android.DreStoreViewModel
 
 class {Feature}ViewModel(
     reducer: {Feature}Reducer = {Feature}Reducer(),
-) : SimpleDreStoreViewModel<{Feature}State, {Feature}Action, {Feature}Effect>(
-    reducer = reducer,
-    initialState = {Feature}State.Initial,
+) : DreStoreViewModel<{Feature}State, {Feature}Action, {Feature}Effect, Nothing>(
+    reducer = reducer.asFullReducer(),
 ) {
+    override val initialState = {Feature}State.Initial
+
+    override suspend fun executeAsyncOp(op: Nothing, stateSnapshot: {Feature}State) {
+        // Nothing type — never called
+    }
+
     // TODO: add public methods that call dispatch()
 }
 ```

@@ -40,7 +40,7 @@ sealed interface MyAsyncOp : DreAsyncOp { ... }
 
 ### ViewModel Rules
 
-- Extend `DreStoreViewModel` (with async ops) or `SimpleDreStoreViewModel` (without)
+- Extend `DreStoreViewModel` — override `initialState` and optionally `sideEffectHandlers`
 - Public methods just call `dispatch(Action)` — no business logic
 - `executeAsyncOp` MUST call `dispatch()` with result action
 - `executeAsyncOp` MUST use `stateSnapshot`, NOT `state.value`

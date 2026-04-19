@@ -7,7 +7,7 @@
 ## Modules
 
 - `dre-core`: Platform-agnostic dispatch loop (`DreStore`, `Reducer`, `ReduceResult`, `SideEffectHandler`)
-- `dre-android`: Android ViewModel integration (`DreStoreViewModel`, `SimpleDreStoreViewModel`)
+- `dre-android`: Android ViewModel integration (`DreStoreViewModel`)
 - `sample`: Counter demo app with Compose UI
 
 ## Build & Test

@@ -22,7 +22,7 @@
 | Module | Purpose | Key Classes |
 |--------|---------|-------------|
 | `dre-core` | Dispatch loop, types, test utilities | `DreStore`, `Reducer`, `ReduceResult`, `SideEffectHandler` |
-| `dre-android` | Android ViewModel binding | `DreStoreViewModel`, `SimpleDreStoreViewModel` |
+| `dre-android` | Android ViewModel binding | `DreStoreViewModel` |
 | `sample` | Counter demo app | `CounterViewModel`, `CounterReducer` |
 
 ## Key Design Decisions
@@ -65,5 +65,5 @@ Async operations are sealed classes returned by the reducer, not launched inside
 ## Current Test Coverage
 
 - dre-core: 17 tests (DreStore, ReducerTestExtensions, ReduceResult)
-- dre-android: 10 tests (DreStoreViewModel, SimpleDreStoreViewModel)
-- Total: 27 tests, 0 failures
+- dre-android: 5 tests (DreStoreViewModel)
+- Total: 22 tests, 0 failures

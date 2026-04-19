@@ -92,15 +92,17 @@ fun close()
 
 ## DreStoreViewModel (dre-android)
 
-Android ViewModel wrapping DreStore. Use for features WITH async ops.
+Android ViewModel wrapping DreStore. Override `initialState` and optionally `sideEffectHandlers`.
 
 ```kotlin
 abstract class DreStoreViewModel<S : DreState, A : DreAction, E : DreEffect, O : DreAsyncOp>(
     reducer: Reducer<S, A, E, O>,
-    sideEffectHandlers: List<SideEffectHandler<E>> = emptyList(),
-    initialState: S,
-    dispatchers: DreDispatchers = DefaultDreDispatchers,
+    dispatchContext: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : ViewModel()
+
+// Open properties (override in subclass)
+protected open val initialState: S           // MUST override
+protected open val sideEffectHandlers: List<SideEffectHandler<E>> = emptyList()
 
 // Properties
 val state: StateFlow<S>
@@ -114,19 +116,6 @@ protected abstract suspend fun executeAsyncOp(op: O, stateSnapshot: S)
 - MUST call `dispatch()` with result action when done
 - MUST handle errors internally
 - MUST use `stateSnapshot`, NOT `state.value`
-
-## SimpleDreStoreViewModel (dre-android)
-
-For features WITHOUT async ops. No `executeAsyncOp` to override.
-
-```kotlin
-abstract class SimpleDreStoreViewModel<S : DreState, A : DreAction, E : DreEffect>(
-    reducer: SimpleReducer<S, A, E>,
-    sideEffectHandlers: List<SideEffectHandler<E>> = emptyList(),
-    initialState: S,
-    dispatchers: DreDispatchers = DefaultDreDispatchers,
-) : DreStoreViewModel<S, A, E, Nothing>(...)
-```
 
 ## Test Utilities (dre-core)
 
