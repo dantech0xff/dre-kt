@@ -41,7 +41,7 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("io.github.dantech0xff", "dre-android", "0.1.0")
+    coordinates("io.github.dantech0xff", "dre-android", "0.1.1")
 
     pom {
         name.set("dre-android")
