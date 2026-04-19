@@ -40,22 +40,24 @@ import kotlinx.coroutines.flow.StateFlow
  */
 abstract class DreStoreViewModel<S : DreState, A : DreAction, E : DreEffect, O : DreAsyncOp>(
     reducer: Reducer<S, A, E, O>,
-    sideEffectHandlers: List<SideEffectHandler<E>> = emptyList(),
-    initialState: S,
     dispatchContext: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : ViewModel() {
 
-    private val store = DreStore(
+    protected open val sideEffectHandlers: List<SideEffectHandler<E>> = emptyList()
+    protected open val initialState: S
+        get() = throw NotImplementedError("Provide initialState or override getter")
+
+    private val store by lazy { DreStore(
         reducer = reducer,
         initialState = initialState,
         scope = viewModelScope,
         dispatchContext = dispatchContext,
         sideEffectHandlers = sideEffectHandlers,
         onAsyncOp = { op, snapshot -> executeAsyncOp(op, snapshot) },
-    )
+    ) }
 
     /** Current state. Observe from UI via `collectAsState()`. */
-    val state: StateFlow<S> = store.state
+    val state: StateFlow<S> get() = store.state
 
     /** Dispatch an action into the reduce loop. */
     protected fun dispatch(action: A) = store.dispatch(action)
