@@ -9,5 +9,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-/plans
+/plans/*
 .claude/session-state/

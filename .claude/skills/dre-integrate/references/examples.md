@@ -129,7 +129,7 @@ sealed interface SettingsEffect : DreEffect {
 ### Reducer + ViewModel
 
 ```kotlin
-class SettingsReducer : SimpleReducer<SettingsState, SettingsAction, SettingsEffect> {
+class SettingsReducer : Reducer<SettingsState, SettingsAction, SettingsEffect, Nothing> {
     override fun reduce(state: SettingsState, action: SettingsAction) = when (action) {
         is SettingsAction.ToggleDarkMode -> SimpleReduceResult(
             state = state.copy(darkMode = !state.darkMode),
@@ -144,7 +144,7 @@ class SettingsReducer : SimpleReducer<SettingsState, SettingsAction, SettingsEff
 class SettingsViewModel(
     reducer: SettingsReducer = SettingsReducer(),
 ) : DreStoreViewModel<SettingsState, SettingsAction, SettingsEffect, Nothing>(
-    reducer = reducer.asFullReducer(),
+    reducer = reducer,
 ) {
     override val initialState = SettingsState()
 

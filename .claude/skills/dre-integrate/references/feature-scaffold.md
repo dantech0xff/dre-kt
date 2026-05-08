@@ -115,9 +115,9 @@ class {Feature}Reducer : Reducer<{Feature}State, {Feature}Action, {Feature}Effec
 package {basePackage}.feature.{featureLower}
 
 import dev.drekt.core.SimpleReduceResult
-import dev.drekt.core.SimpleReducer
+import dev.drekt.core.Reducer
 
-class {Feature}Reducer : SimpleReducer<{Feature}State, {Feature}Action, {Feature}Effect> {
+class {Feature}Reducer : Reducer<{Feature}State, {Feature}Action, {Feature}Effect, Nothing> {
 
     override fun reduce(
         state: {Feature}State,
@@ -162,7 +162,7 @@ import dev.drekt.android.DreStoreViewModel
 class {Feature}ViewModel(
     reducer: {Feature}Reducer = {Feature}Reducer(),
 ) : DreStoreViewModel<{Feature}State, {Feature}Action, {Feature}Effect, Nothing>(
-    reducer = reducer.asFullReducer(),
+    reducer = reducer,
 ) {
     override val initialState = {Feature}State.Initial
 
