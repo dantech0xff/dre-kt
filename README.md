@@ -26,18 +26,22 @@ dependencies {
 }
 ```
 
-### Claude Code Skill
+### Claude Code and Codex Skill
 
-Install the `dre-integrate` skill to let Claude Code help you integrate dre-kt:
+Install the `dre-integrate` skill for Claude Code and Codex:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/dantech0xff/dre-kt/master/install-skill.sh | bash
+gh api -H "Accept: application/vnd.github.raw" "repos/dantech0xff/dre-kt/contents/install-skill.sh?ref=master" | bash
 ```
+
+Requires authenticated GitHub CLI (`gh auth login`) or `GH_TOKEN`.
 
 Then use in Claude Code:
 - `/dre-integrate setup` — Add dependency to your project
 - `/dre-integrate feature login` — Scaffold a new feature
 - `/dre-integrate migrate` — Migrate existing ViewModel to DRE
+
+Or use `$dre-integrate` in Codex.
 
 ## Modules
 

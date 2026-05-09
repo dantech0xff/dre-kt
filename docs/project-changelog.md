@@ -15,6 +15,8 @@ All notable project changes are recorded here. Dates use `YYYY-MM-DD`.
 ### Changed
 
 - `install-skill.sh` supports installing the `dre-integrate` skill for Claude, Codex, or both.
+- No-argument `install-skill.sh` now installs the `dre-integrate` skill for both Claude and Codex by default.
+- `install-skill.sh` now downloads skill files through GitHub CLI instead of `curl`.
 - `dre-integrate` scaffold examples avoid non-existent reducer adapter helpers.
 
 ### Verified

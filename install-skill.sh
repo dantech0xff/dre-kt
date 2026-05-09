@@ -1,7 +1,9 @@
 #!/bin/bash
 # Install dre-integrate skill for Claude Code and Codex.
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/dantech0xff/dre-kt/master/install-skill.sh | bash
+#   gh api -H "Accept: application/vnd.github.raw" "repos/dantech0xff/dre-kt/contents/install-skill.sh?ref=master" | bash
+#   ./install-skill.sh
+#   ./install-skill.sh --claude
 #   ./install-skill.sh --codex
 #   ./install-skill.sh --all
 
@@ -11,7 +13,6 @@ REPO="dantech0xff/dre-kt"
 BRANCH="master"
 SKILL_NAME="dre-integrate"
 SOURCE_SKILL_DIR=".claude/skills/$SKILL_NAME"
-BASE_URL="https://raw.githubusercontent.com/$REPO/$BRANCH/$SOURCE_SKILL_DIR"
 CLAUDE_HOME="${CLAUDE_HOME:-.claude}"
 CODEX_HOME="${CODEX_HOME:-${HOME:-.}/.codex}"
 
@@ -32,10 +33,13 @@ Usage:
   install-skill.sh [--claude|--codex|--all]
 
 Options:
-  --claude   Install to ${CLAUDE_HOME:-.claude}/skills/dre-integrate (default)
+  --claude   Install to ${CLAUDE_HOME:-.claude}/skills/dre-integrate
   --codex    Install to ${CODEX_HOME}/skills/dre-integrate
-  --all      Install to both Claude and Codex skill directories
+  --all      Install to both Claude and Codex skill directories (default)
   --help     Show this help
+
+Requirements:
+  gh         Authenticated GitHub CLI available on PATH
 
 Environment:
   CLAUDE_HOME  Override Claude home directory for install/test
@@ -45,7 +49,7 @@ EOF
 
 TARGET="${1:-}"
 if [ -z "$TARGET" ]; then
-    TARGET="--claude"
+    TARGET="--all"
 fi
 
 INSTALL_CLAUDE=false
@@ -72,6 +76,18 @@ case "$TARGET" in
         exit 1
         ;;
 esac
+
+require_gh() {
+    if ! command -v gh >/dev/null 2>&1; then
+        echo "GitHub CLI is required. Install gh, then run this script again." >&2
+        exit 1
+    fi
+
+    if ! gh auth status >/dev/null 2>&1; then
+        echo "GitHub CLI authentication is required. Run gh auth login or set GH_TOKEN, then run this script again." >&2
+        exit 1
+    fi
+}
 
 add_codex_frontmatter() {
     local skill_file="$1"
@@ -108,7 +124,10 @@ download_skill() {
     for file in "${FILES[@]}"; do
         echo "  Downloading $file"
         mkdir -p "$(dirname "$tmp_dir/$file")"
-        curl -fsSL "$BASE_URL/$file" -o "$tmp_dir/$file"
+        gh api \
+            -H "Accept: application/vnd.github.raw" \
+            "repos/$REPO/contents/$SOURCE_SKILL_DIR/$file?ref=$BRANCH" \
+            > "$tmp_dir/$file"
     done
 
     if [ "$target_kind" = "codex" ]; then
@@ -134,6 +153,8 @@ policy:
   allow_implicit_invocation: true
 EOF
 }
+
+require_gh
 
 if [ "$INSTALL_CLAUDE" = true ]; then
     download_skill "$CLAUDE_HOME/skills/$SKILL_NAME" "claude"
