@@ -14,7 +14,7 @@ BRANCH="master"
 SKILL_NAME="dre-integrate"
 SOURCE_SKILL_DIR=".claude/skills/$SKILL_NAME"
 CLAUDE_HOME="${CLAUDE_HOME:-.claude}"
-CODEX_HOME="${CODEX_HOME:-${HOME:-.}/.codex}"
+CODEX_HOME="${CODEX_HOME:-.codex}"
 
 FILES=(
     "SKILL.md"
